@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AuthService.Domain.Entities;
@@ -7,19 +6,20 @@ public class UserProfile
 {
     [Key]
     [MaxLength(16)]
-    public string Id {get; set;} = string.Empty;
-
-    [Required(ErrorMessage = "El ID del usuario es obligatorio")]
-    [MaxLength(16)]
-    public string UserId {get; set;} = string.Empty;
-
-    [MaxLength(250)]
-    public string ProfilePicture {get; set;} = string.Empty;
+    public string Id { get; set; } = string.Empty;
 
     [Required]
-    [StringLength(8, MinimumLength = 8, ErrorMessage = "El numero de telefono debe de tener exactamente 8 caracteres")]
-    [RegularExpression(@"^\d{8}$", ErrorMessage = "El numeor de telefono debe de contener solo numeros")]
-    public string Phone {get; set;} = string.Empty;
-    public User User {get; set;} = null!;
-    
+    [MaxLength(16)]
+    public string UserId { get; set; } = string.Empty;
+
+    [MaxLength(512)]
+    public string ProfilePicture { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(8, MinimumLength = 8, ErrorMessage = "El número de teléfono debe tener exactamente 8 dígitos.")]
+    [RegularExpression(@"^\d{8}$", ErrorMessage = "El teléfono solo debe contener números.")]
+    public string Phone { get; set; } = string.Empty;
+
+    [Required]
+    public User User { get; set; } = null!;
 }

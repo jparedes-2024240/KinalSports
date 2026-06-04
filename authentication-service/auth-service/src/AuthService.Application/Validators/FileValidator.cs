@@ -1,4 +1,3 @@
-using System;
 using AuthService.Application.Interfaces;
 
 namespace AuthService.Application.Validators;
