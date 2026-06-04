@@ -52,11 +52,6 @@ dump/
 # Keys y archivos sensibles
 **/keys/
 
-# Variables de entorno - .NET
-**/appsettings.Development.json
-**/appsettings.Production.json
-**/appsettings.Local.json
-
 # .NET publish output
 **/publish/
 
