@@ -95,7 +95,7 @@ export default function ProfileScreen() {
 
   const avatarUri = avatarSource && typeof avatarSource === 'string' && avatarSource.startsWith('http')
     ? { uri: avatarSource }
-    : require('../../../../assets/avatarDefault.png');
+    : require('../../../../assets/avatarDefault-1749508519496.png');
 
   return (
     <View style={styles.container}>
