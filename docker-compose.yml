@@ -7,17 +7,17 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-IN6AV}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-In6av2026!}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Kinal2026!}
       POSTGRES_DB: ${POSTGRES_DB:-kinal_sports}
     ports:
       - "${POSTGRES_PORT:-5435}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test:
+      test: 
         [
           "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-IN6AV} -d ${POSTGRES_DB:-kinal_sports}",
+          "pg_isready -U ${POSTGRES_USER:-IN6AV} -d ${POSTGRES_DB:-kinal_sports}"
         ]
       interval: 10s
       timeout: 5s
@@ -25,13 +25,12 @@ services:
       start_period: 10s
     networks:
       - kinal-network
-    
   mongodb:
     image: mongo:7
     container_name: kinal_mongodb
     restart: unless-stopped
     ports:
-      - "${MONGODB_PORT:-27018}:27017"
+      - "${MONGODB_PORT:-27020}:27017"
     volumes:
       - mongo_data:/data/db
     healthcheck:
@@ -54,18 +53,18 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:5156
+      ASPNETCORE_URLS: http://+:5296
       DOTNET_USE_POLLING_FILE_WATCHER: "1"
       ConnectionStrings__DefaultConnection: >-
         Host=postgres;Port=5432;Database=${POSTGRES_DB:-kinal_sports};
-        Username=${POSTGRES_USER:-IN6AV};Password=${POSTGRES_PASSWORD:-In6av2026!}
+        Username=${POSTGRES_USER:-IN6AV};Password=${POSTGRES_PASSWORD:-Kinal2026!}
       AppSettings__FrontendUrl: ${FRONTEND_URL:-http://localhost:5173}
-      JwtSettings__SecretKey: ${JWT_SECRET}
-      JwtSettings__Issuer: ${JWT_ISSUER}
-      JwtSettings__Audience: ${JWT_AUDIENCE}
+      JwtSettings__SecretKey: ${JWT_SECRET:-+P]0aPtzQyvtV]&}cTOD9O|5zo,J3b3m}
+      JwtSettings__Issuer: ${JWT_ISSUER:-KinalSports}
+      JwtSettings__Audience: ${JWT_AUDIENCE:-KinalSports}
     env_file:
       - path: .env.docker
-        required: true
+        required: false
     volumes:
       - ./authentication-service/auth-service:/src
       - /src/src/AuthService.Api/bin
@@ -77,7 +76,7 @@ services:
       - /src/src/AuthService.Persistence/bin
       - /src/src/AuthService.Persistence/obj
     ports:
-      - "${AUTH_SERVICE_PORT:-5156}:5156"
+      - "${AUTH_SERVICE_PORT:-5296}:5296"
     networks:
       - kinal-network
 
@@ -97,17 +96,17 @@ services:
       DB_PORT: 5432
       DB_NAME: ${POSTGRES_DB:-kinal_sports}
       DB_USERNAME: ${POSTGRES_USER:-IN6AV}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-In6av2026!}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-Kinal2026!}
       DEFAULT_CONNECTION: >-
         Host=postgres;Port=5432;Database=${POSTGRES_DB:-kinal_sports};
-        Username=${POSTGRES_USER:-IN6AV};Password=${POSTGRES_PASSWORD:-In6av2026!}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ISSUER: ${JWT_ISSUER}
-      JWT_AUDIENCE: ${JWT_AUDIENCE}
+        Username=${POSTGRES_USER:-IN6AV};Password=${POSTGRES_PASSWORD:-Kinal2026!}
+      JWT_SECRET: ${JWT_SECRET:-+P]0aPtzQyvtV]&}cTOD9O|5zo,J3b3m}
+      JWT_ISSUER: ${JWT_ISSUER:-KinalSports}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-KinalSports}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
     env_file:
       - path: .env.docker
-        required: true
+        required: false
     volumes:
       - ./authentication-service/auth-node:/app
       - /app/node_modules
@@ -131,20 +130,20 @@ services:
         condition: service_started
     environment:
       NODE_ENV: development
-      PORT: 3009
-      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-kinalSports}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ISSUER: ${JWT_ISSUER}
-      JWT_AUDIENCE: ${JWT_AUDIENCE}
+      PORT: 3021
+      URI_MONGODB: mongodb://mongodb:27020/${MONGO_DB_NAME:-kinalSports}
+      JWT_SECRET: ${JWT_SECRET:-+P]0aPtzQyvtV]&}cTOD9O|5zo,J3b3m}
+      JWT_ISSUER: ${JWT_ISSUER:-KinalSports}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-KinalSports}
       ADMIN_ALLOWED_ORIGINS: ${FRONTEND_URL:-http://localhost:5173}
     env_file:
       - path: .env.docker
-        required: true
+        required: false
     volumes:
       - ./server-admin:/app
       - /app/node_modules
     ports:
-      - "${SERVER_ADMIN_PORT:-3009}:3009"
+      - "${SERVER_ADMIN_PORT:-3021}:3021"
     networks:
       - kinal-network
 
@@ -162,15 +161,15 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3008
-      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-kinalSports}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ISSUER: ${JWT_ISSUER}
-      JWT_AUDIENCE: ${JWT_AUDIENCE}
-      ADMIN_SERVICE_URL: http://server-admin:3009/kinalSportsAdmin/v1
+      URI_MONGODB: mongodb://mongodb:27020/${MONGO_DB_NAME:-kinalSports}
+      JWT_SECRET: ${JWT_SECRET:-+P]0aPtzQyvtV]&}cTOD9O|5zo,J3b3m}
+      JWT_ISSUER: ${JWT_ISSUER:-KinalSports}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-KinalSports}
+      ADMIN_SERVICE_URL: http://server-admin:3021/kinalSportsAdmin/v1
       INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-change-me-internal-token}
     env_file:
       - path: .env.docker
-        required: true
+        required: false
     volumes:
       - ./server-user:/app
       - /app/node_modules
@@ -193,9 +192,9 @@ services:
       server-admin:
         condition: service_started
     environment:
-      VITE_AUTH_URL: ${VITE_AUTH_URL:-http://localhost:5156/api/v1}
-      VITE_ADMIN_URL: ${VITE_ADMIN_URL:-http://localhost:3009/kinalSportsAdmin/v1}
-      VITE_CLOUDINARY_BASE_URL: ${VITE_CLOUDINARY_BASE_URL:-https://res.cloudinary.com/example/image/upload/}
+      VITE_AUTH_URL: ${VITE_AUTH_URL:-http://localhost:5296/api/v1}
+      VITE_ADMIN_URL: ${VITE_ADMIN_URL:-http://localhost:3021/kinalSportsAdmin/v1}
+      VITE_CLOUDINARY_BASE_URL: ${VITE_CLOUDINARY_BASE_URL:-https://res.cloudinary.com/dmzpqylve/image/upload/}
       CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./client-admin:/app
